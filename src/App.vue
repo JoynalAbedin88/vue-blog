@@ -1,33 +1,42 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+  <div id="app" class="wrapper">
+    <headerComponent/>
     <router-view/>
+    <footerComponent/>
   </div>
 </template>
 
+
+<script>
+import headerComponent from '@/views/Header.vue'
+import footerComponent from '@/views/Footer.vue'
+import axios from 'axios'
+
+export default {
+   components: {
+    headerComponent,
+    footerComponent,
+  },
+  
+  async created(){
+        let user = await axios.get('/user').catch(() => {})
+        if(user)
+          this.$store.dispatch('getUser', user.data)
+      
+        this.$store.dispatch('getPosts', '')
+  },
+}
+</script>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  @import '~bootstrap/dist/css/bootstrap.css';
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #1da9c2;
+    height: 100vh;
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-@import'~bootstrap/dist/css/bootstrap.css'
+  }
+  .swal-button--confirm{
+    background:rgb(3, 122, 39);
+  }
 </style>
