@@ -4,7 +4,10 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                    <router-link class="navbar-brand" to="/">Logo</router-link>
+                    <router-link class="navbar-brand" to="/">
+                        <span v-if="!user">Logo</span>
+                        <span v-if="user">{{ user.name }}</span>
+                    </router-link> 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     </button>
@@ -39,26 +42,25 @@
     </div>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-    data(){
-        return {
-            search: '',
-        }
+  data() {
+    return {
+      search: "",
+    };
+  },
+  methods: {
+    searchPosts() {
+      this.$store.dispatch("getPosts", "?s=" + this.search);
+      this.$router.push("/").catch(() => {});
     },
-    methods: {
-        searchPosts() {
-            this.$store.dispatch('getPosts', '?s='+this.search)
-            this.$router.push('/').catch(()=>{})
-        },
-        logout(){
-            localStorage.removeItem('token')
-            this.$store.dispatch('getUser', null)
-            this.$router.push('/').catch(() => {})
-        }
+    logout() {
+      localStorage.removeItem("token");
+      this.$store.dispatch("getUser", null);
     },
-    computed:{
-        ...mapGetters(['user']),
-    }
-}
+  },
+  computed: {
+    ...mapGetters(["user"]),
+  },
+};
 </script>
